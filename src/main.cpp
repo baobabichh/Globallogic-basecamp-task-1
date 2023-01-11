@@ -81,29 +81,6 @@ void run()
     }
 }
 
-class MAKE
-{
-public:
-    void make()
-    {
-        PRINT("MAKE " << val);
-    }
-    int val = 100;
-};
-
-struct A
-{
-    MAKE *m_this;
-};
-
-void *f1(void *params)
-{
-    A &val = *static_cast<A *>(params);
-    val.m_this->make();
-
-    return nullptr;
-}
-
 int main()
 {
 
