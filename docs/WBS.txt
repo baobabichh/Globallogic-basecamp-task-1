@@ -1,0 +1,98 @@
+Work Breakdown Structure : 
+
+1.Create class SearchResult (Linux). (1 hour) - DONE
+    This is the container for the DirectorySearcher result. This helps us get the result and know if it's ready.
+
+2.Create a DirectorySearcher class (Linux). (1 day) - DONE
+    It should search the directory in multiple threads, and when the result is ready, set the SearchResult.
+
+3.Test and edit SearchResult and DirectorySearcher on Linux. (0.5 day) - DONE
+
+4.Test and edit SearchResult and DirectorySearcher on Windows. (0.5 day) - DONE
+
+5.Create TcpSocket class (Linux). (1 day) - DONE
+    Class for sending and receiving data.
+
+6.Create class TcpListener (Linux). (1 day) - DONE
+    It must listen for incoming connections on a port. When setting up a TcpSocket connection.
+
+7.Create class SocketSelector (Linux). (1 day) - DONE
+    It allows to read from multiple sockets.
+
+8.Test and edit TcpSocket, TcpListener, SocketSelector on Linux. (0.5 day) - DONE
+
+9.Create a summary task (Linux). (0.5 day) - WORKING
+
+10.Create a TTcpSocket, TcpListener, SocketSelector class on Windows. (1 day)
+
+11.Test and edit TcpSocket, TcpListener, SocketSelector on Windows. (1 day)
+
+12.Test and edit the final task on Windows and Linux. (0.5 day)
+
+
+Classes
+
+class SearchResult
+{
+    friend class DirectorySearcher;
+public:
+    SearchResult();
+    ~SearchResult();
+    bool ready() const;
+    const std::string &get() const;
+    std::string &get();
+};
+
+class DirectorySearcher
+{
+public:
+    DirectorySearcher();
+    ~DirectorySearcher();
+    void search_for_directory(const std::string &directory, SearchResult &result);
+    void search_for_directory(const std::string &directory, const std::string &where, SearchResult &result);
+    bool is_searching() const;
+    void stop_search();
+};
+
+class TcpListener
+{
+public:
+    TcpListener();
+    ~TcpListener();
+    bool accept(TcpSocket &socket);
+    bool listen(unsigned short port, const std::string &ip);
+    void close();
+};
+
+class TcpSocket
+{
+public:
+    TcpSocket();
+    ~TcpSocket();
+    bool connect(const std::string &ip, unsigned short port);
+    void disconnect();
+    bool receive(void *buffer, size_t buffer_size);
+    bool receive(void *buffer, size_t buffer_size, size_t &received);
+    bool send(void *buffer, size_t buffer_size);
+    bool send(void *buffer, size_t buffer_size, size_t &sent);
+    
+    unsigned short get_port() const;
+    unsigned short get_remote_port() const;
+    std::string get_remote_address() const;
+};
+
+
+class SocketSelector
+{
+public:
+    SocketSelector();
+    ~SocketSelector();
+    void add_socket(TcpListener &socket);
+    void add_socket(TcpSocket &socket);
+    void remove_socket(TcpSocket &socket);
+    void remove_socket(TcpListener &socket);
+    void clear();
+    bool is_ready(TcpListener &socket);
+    bool is_ready(TcpSocket &socket);
+    bool wait();
+};
